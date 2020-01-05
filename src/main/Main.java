@@ -1,11 +1,9 @@
 package main;
 
-import engine.graphics.Mesh;
-import engine.graphics.Renderer;
-import engine.graphics.Shader;
-import engine.graphics.Vertex;
+import engine.graphics.*;
 import engine.io.Input;
 import engine.io.Window;
+import engine.math.Vector2f;
 import engine.math.Vector3f;
 import org.lwjgl.glfw.GLFW;
 
@@ -21,14 +19,14 @@ public class Main implements Runnable {
     public final int WINDOW_HEIGHT = 480;
 
     public Mesh mesh = new Mesh(new Vertex[]{
-            new Vertex(new Vector3f(-0.5f, 0.5f, 0.0f)),
-            new Vertex(new Vector3f(0.5f, 0.5f, 0.0f)),
-            new Vertex(new Vector3f(0.5f, -0.5f, 0.0f)),
-            new Vertex(new Vector3f(-0.5f, -0.5f, 0.0f))
+            new Vertex(new Vector3f(-0.5f, 0.5f, 0.0f), new Vector3f(1.0f, 0.0f, 1.0f), new Vector2f(0.0f, 1.0f)),
+            new Vertex(new Vector3f(-0.5f, -0.5f, 0.0f), new Vector3f(0.0f, 1.0f, 0.0f), new Vector2f(1.0f, 0.0f)),
+            new Vertex(new Vector3f(0.5f, -0.5f, 0.0f), new Vector3f(0.0f, 0.0f, 1.0f), new Vector2f(1.0f, 1.0f)),
+            new Vertex(new Vector3f(0.5f, 0.5f, 0.0f), new Vector3f(1.0f, 1.0f, 0.0f), new Vector2f(0.0f, 0.0f))
     }, new int[]{
             0, 1, 2,
-            0, 3, 2
-    });
+            0, 3, 1
+    }, new Material("/textures/Bricks.png"));
 
     public void start()
     {
@@ -48,7 +46,7 @@ public class Main implements Runnable {
                 window.setFullScreen(!window.isFullScreen());
             }
         }
-        window.destroy();
+        close();
     }
 
     public void init()
@@ -75,6 +73,13 @@ public class Main implements Runnable {
     {
         renderer.renderMesh(mesh);
         window.swapBuffers();
+    }
+
+    private void close()
+    {
+        window.destroy();
+        mesh.destroy();
+        shader.destroy();
     }
 
     public static void main(String[] args)
